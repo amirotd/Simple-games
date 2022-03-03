@@ -1,4 +1,5 @@
 import random
+import copy
 
 
 class Game2048:
@@ -30,8 +31,33 @@ class Game2048:
             print()
         print("=" * 20)
 
+    def main(self):
+        while not self.game_over:
+            valid_input = True
+            direction = input("Enter a direction(w,a,s,d) ").lower()
+            temp_board = copy.deepcopy(self.board)
+
+            if direction == 'w':
+                pass
+            elif direction == 'a':
+                pass
+            elif direction == 's':
+                pass
+            elif direction == 'd':
+                pass
+            elif direction == 'exit':
+                break
+            else:
+                valid_input = False
+
+            if not valid_input:
+                print("please enter a valid direction!")
+            else:
+                if self.board == temp_board:
+                    print("try diff direction")
+
 
 if __name__ == '__main__':
     game = Game2048()
     game.print_board()
-
+    game.main()

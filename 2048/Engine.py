@@ -30,6 +30,14 @@ class Game2048:
                     print(' ' * (count-len(str(self.board[i][j])))+str(self.board[i][j])+'|', end='')
             print()
         print("=" * 20)
+    
+    def generate_random(self):
+        ran_x = random.randrange(0, 4, 1)
+        ran_y = random.randrange(0, 4, 1)
+        if self.board[ran_x][ran_y] != 0:
+            return self.generate_random()
+        else:
+            return ran_x, ran_y
 
     def main(self):
         while not self.game_over:

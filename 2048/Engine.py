@@ -46,9 +46,17 @@ class Game2048:
         else:
             return ran_x, ran_y
 
+    def get_random_num(self):
+        """
+         This method chooses a random number from init_val list
+        by use of generate_random method
+        """
+        rand_x, rand_y = self.generate_random()
+        self.board[rand_x][rand_y] = random.choice(self.init_val)
+
     def main(self):
         """
-        This method is the main loop of the game
+         This method is the main loop of the game
         """
         while not self.game_over:
             valid_input = True

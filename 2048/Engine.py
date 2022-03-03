@@ -87,5 +87,13 @@ class Game2048:
 
 if __name__ == '__main__':
     game = Game2048()
+    print("""
+    _______________________
+    |     (2048 game)     |
+    -----------------------
+    """)
+    input("press ENTER to start...")
+    game.get_random_num()
+    game.get_random_num()
     game.print_board()
     game.main()

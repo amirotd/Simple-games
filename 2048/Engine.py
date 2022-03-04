@@ -64,14 +64,16 @@ class Game2048:
         """
         for k in range(self.DIMENSION - 1):
             for j in range(self.DIMENSION - 1, 0, -1):
-                if row[j - 1] == 0:
+                if row[j - 1] == 0:    # slides the element if its left is 0 and then puts 0 in its previous place
                     row[j - 1] = row[j]
                     row[j] = 0
         for j in range(self.DIMENSION - 1):
+            # if the left element is equal to the current element, twice the value and slides it
             if row[j] == row[j + 1]:
                 row[j] *= 2
                 row[j + 1] = 0
         for k in range(self.DIMENSION - 2):
+            # slides the other elements that are left
             for j in range(self.DIMENSION - 1, 0, -1):
                 if row[j - 1] == 0:
                     row[j - 1] = row[j]
@@ -104,7 +106,7 @@ class Game2048:
             if direction == 'w':
                 pass
             elif direction == 'a':
-                pass
+                self.slide_left(self.board)
             elif direction == 's':
                 pass
             elif direction == 'd':
@@ -119,6 +121,9 @@ class Game2048:
             else:
                 if self.board == temp_board:
                     print("try diff direction")
+                else:
+                    self.get_random_num()
+                    self.print_board()
 
 
 if __name__ == '__main__':

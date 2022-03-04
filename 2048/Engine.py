@@ -54,6 +54,29 @@ class Game2048:
         rand_x, rand_y = self.generate_random()
         self.board[rand_x][rand_y] = random.choice(self.init_val)
 
+    def slide_horizontally(self, row):
+        """
+         This method slides the elements horizontally(to the left) and can be used in go_right
+        and go_left methods.
+        :param row: This is the row of our main board that we want to slide its elements
+        :return: The slided version of `row`
+        """
+        for k in range(self.DIMENSION - 1):
+            for j in range(self.DIMENSION - 1, 0, -1):
+                if row[j - 1] == 0:
+                    row[j - 1] = row[j]
+                    row[j] = 0
+        for j in range(self.DIMENSION - 1):
+            if row[j] == row[j + 1]:
+                row[j] *= 2
+                row[j + 1] = 0
+        for k in range(self.DIMENSION - 2):
+            for j in range(self.DIMENSION - 1, 0, -1):
+                if row[j - 1] == 0:
+                    row[j - 1] = row[j]
+                    row[j] = 0
+        return row
+
     def main(self):
         """
          This method is the main loop of the game

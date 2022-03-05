@@ -85,11 +85,37 @@ class Game2048:
          This method applies the slide_horizontally method to all of the main-board's rows.
         (Slides every row to left)
 
-        :param bord: The main-board that we wants to slide it to left
+        :param bord: The main-board that we wants to slide it to Left
         :return: The slided version of main-board
         """
         for i in range(self.DIMENSION):
             bord[i] = self.slide_horizontally(bord[i])
+        return bord
+
+    def reverse_row(self, row):
+        """
+         This method takes the row list and reverses it.
+
+        :param row: The row list that we want to reverse
+        :return: Reversed list
+        """
+        temp_list = []
+        for i in range(self.DIMENSION - 1, -1, -1):
+            temp_list.append(row[i])
+        return temp_list
+
+    def slide_right(self, bord):
+        """
+         This method takes the main-board as input and then reverses its rows,
+        slides it to left and then reverses it again.(this process slides rows to right)
+
+        :param bord: The main-board that we wants to slide it to Right
+        :return: The slided version of main-board
+        """
+        for i in range(self.DIMENSION):
+            bord[i] = self.reverse_row(bord[i])
+            bord[i] = self.slide_horizontally(bord[i])
+            bord[i] = self.reverse_row(bord[i])
         return bord
 
     def main(self):

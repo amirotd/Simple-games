@@ -136,7 +136,7 @@ class Game2048:
             elif direction == 's':
                 pass
             elif direction == 'd':
-                pass
+                self.slide_right(self.board)
             elif direction == 'exit':
                 break
             else:

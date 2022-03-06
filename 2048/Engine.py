@@ -145,6 +145,29 @@ class Game2048:
                         bord[j - 1][i] = bord[j][i]
                         bord[j][i] = 0
 
+    def slide_down(self, bord):
+        """
+         This method slides the elements to down direction.
+
+        :param bord: The main-board that we wants to slide it to Down
+        :return: The slided version of main-board
+        """
+        for i in range(self.DIMENSION):
+            for k in range(self.DIMENSION - 1):
+                for j in range(self.DIMENSION - 1):
+                    if bord[j + 1][i] == 0:
+                        bord[j + 1][i] = bord[j][i]
+                        bord[j][i] = 0
+            for j in range(self.DIMENSION - 1, 0, -1):
+                if bord[j][i] == bord[j - 1][i]:
+                    bord[j][i] *= 2
+                    bord[j - 1][i] = 0
+            for k in range(self.DIMENSION - 2):
+                for j in range(self.DIMENSION - 1):
+                    if bord[j + 1][i] == 0:
+                        bord[j + 1][i] = bord[j][i]
+                        bord[j][i] = 0
+
     def main(self):
         """
          This method is the main loop of the game

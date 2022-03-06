@@ -68,7 +68,8 @@ class Game2048:
                     row[j - 1] = row[j]
                     row[j] = 0
         for j in range(self.DIMENSION - 1):
-            # if the left element is equal to the current element, twice the value and slides it
+            # if the right element is equal to the current element,
+            # twice the value of current element and put 0 instead of previous(right) element
             if row[j] == row[j + 1]:
                 row[j] *= 2
                 row[j + 1] = 0
@@ -117,6 +118,32 @@ class Game2048:
             bord[i] = self.slide_horizontally(bord[i])
             bord[i] = self.reverse_row(bord[i])
         return bord
+
+    def slide_up(self, bord):
+        """
+         This method slides the elements to up direction.
+
+        :param bord: The main-board that we wants to slide it to Up
+        :return: The slided version of main-board
+        """
+        for i in range(self.DIMENSION):
+            for k in range(self.DIMENSION - 1):
+                for j in range(self.DIMENSION - 1, 0, -1):
+                    if bord[j - 1][i] == 0:  # slides the element if its up is 0 and then puts 0 in its previous place
+                        bord[j - 1][i] = bord[j][i]
+                        bord[j][i] = 0
+            for j in range(self.DIMENSION - 1):
+                # if the down element is equal to the current element,
+                # twice the value of current element and put 0 instead of previous(down) element
+                if bord[j][i] == bord[j + 1][i]:
+                    bord[j][i] *= 2
+                    bord[j + 1][i] = 0
+            for k in range(self.DIMENSION - 2):
+                # slides the other elements that are left
+                for j in range(self.DIMENSION - 1, 0, -1):
+                    if bord[j - 1][i] == 0:
+                        bord[j - 1][i] = bord[j][i]
+                        bord[j][i] = 0
 
     def main(self):
         """

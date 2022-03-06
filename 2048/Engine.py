@@ -183,11 +183,11 @@ class Game2048:
             temp_board = copy.deepcopy(self.board)
 
             if direction == 'w':
-                pass
+                self.slide_up(self.board)
             elif direction == 'a':
                 self.slide_left(self.board)
             elif direction == 's':
-                pass
+                self.slide_down(self.board)
             elif direction == 'd':
                 self.slide_right(self.board)
             elif direction == 'exit':

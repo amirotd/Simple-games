@@ -155,14 +155,17 @@ class Game2048:
         for i in range(self.DIMENSION):
             for k in range(self.DIMENSION - 1):
                 for j in range(self.DIMENSION - 1):
-                    if bord[j + 1][i] == 0:
+                    if bord[j + 1][i] == 0:  # slides the element if its down is 0 and then puts 0 in its previous place
                         bord[j + 1][i] = bord[j][i]
                         bord[j][i] = 0
             for j in range(self.DIMENSION - 1, 0, -1):
+                # if the up element is equal to the current element,
+                # twice the value of current element and put 0 instead of previous(up) element
                 if bord[j][i] == bord[j - 1][i]:
                     bord[j][i] *= 2
                     bord[j - 1][i] = 0
             for k in range(self.DIMENSION - 2):
+                # slides the other elements that are left
                 for j in range(self.DIMENSION - 1):
                     if bord[j + 1][i] == 0:
                         bord[j + 1][i] = bord[j][i]

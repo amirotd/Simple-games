@@ -212,8 +212,14 @@ class Game2048:
                 if self.board == temp_board:
                     print("try diff direction")
                 else:
-                    self.get_random_num()
-                    self.print_board()
+                    if self.check_wining():
+                        self.print_board()
+                        print("***you won!***")
+                        input("press ENTER to exit...")
+                        self.game_over = True
+                    else:
+                        self.get_random_num()
+                        self.print_board()
 
 
 if __name__ == '__main__':

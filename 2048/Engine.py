@@ -171,7 +171,7 @@ class Game2048:
                         bord[j + 1][i] = bord[j][i]
                         bord[j][i] = 0
 
-    def check_wining(self):
+    def check_winning(self):
         """
          This method checks every element in main-board to find 2048.
         if it finds 2048 returns true, otherwise returns false.
@@ -212,7 +212,7 @@ class Game2048:
                 if self.board == temp_board:
                     print("try diff direction")
                 else:
-                    if self.check_wining():
+                    if self.check_winning():
                         self.print_board()
                         print("***you won!***")
                         input("press ENTER to exit...")

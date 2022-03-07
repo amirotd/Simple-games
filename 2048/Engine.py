@@ -171,6 +171,17 @@ class Game2048:
                         bord[j + 1][i] = bord[j][i]
                         bord[j][i] = 0
 
+    def check_wining(self):
+        """
+         This method checks every element in main-board to find 2048.
+        if it finds 2048 returns true, otherwise returns false.
+        """
+        for row in range(4):
+            for num in range(4):
+                if self.board[row][num] == 2048:
+                    return True
+        return False
+
     def main(self):
         """
          This method is the main loop of the game

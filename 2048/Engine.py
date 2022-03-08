@@ -182,6 +182,22 @@ class Game2048:
                     return True
         return False
 
+    def moves_left(self):
+        """
+         This method checks for all of the moves in every direction
+        """
+        temp_board1 = copy.deepcopy(self.board)
+        temp_board2 = copy.deepcopy(self.board)
+        self.slide_up(temp_board1)
+        if temp_board1 == temp_board2:
+            self.slide_down(temp_board1)
+            if temp_board1 == temp_board2:
+                self.slide_left(temp_board1)
+                if temp_board1 == temp_board2:
+                    self.slide_right(temp_board1)
+                    return False
+        return True
+
     def main(self):
         """
          This method is the main loop of the game
@@ -220,6 +236,11 @@ class Game2048:
                     else:
                         self.get_random_num()
                         self.print_board()
+
+                        if not self.moves_left():
+                            print("you lost :(")
+                            input("press ENTER to exit...")
+                            self.game_over = True
 
 
 if __name__ == '__main__':

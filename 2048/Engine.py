@@ -1,5 +1,6 @@
 import random
 import copy
+import os
 
 
 class Game2048:
@@ -12,6 +13,13 @@ class Game2048:
         self.DIMENSION = 4
         self.game_over = False
 
+    @staticmethod
+    def clear_screen():
+        """
+         This method clears the interpreter console.
+        """
+        os.system('cls' if os.name == 'nt' else 'clear')
+
     def print_board(self):
         """
          This method prints the whole game main-board in tables.
@@ -23,6 +31,7 @@ class Game2048:
                     largest = self.board[row][num]
         count = len(str(largest))   # every cell of the table will be equal to the size of the largest number
 
+        self.clear_screen()
         print("=" * 20)
         for i in range(self.DIMENSION):
             print('|', end='')

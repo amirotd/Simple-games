@@ -1,6 +1,7 @@
 import sys
 import pygame
 from Engine import Game2048
+import copy
 
 
 class GameGUI:
@@ -28,6 +29,7 @@ class GameGUI:
     def load_board(self, surface):
         for row in range(self.DIMENSION):
             for col in range(self.DIMENSION):
+                pygame.draw.rect(surface, 'grey', [col * self.SQ_SIZE, row * self.SQ_SIZE, self.SQ_SIZE, self.SQ_SIZE])
                 pygame.draw.rect(surface, 'red', [col * self.SQ_SIZE, row * self.SQ_SIZE, self.SQ_SIZE, self.SQ_SIZE], 1)
 
     def update_blocks(self, surface, stat):
@@ -46,13 +48,42 @@ class GameGUI:
         main_board.fill(pygame.Color("grey"))
         self.load_images()
 
+        status.get_random_num()
+        status.get_random_num()
+
         while True:
+            temp_board = copy.deepcopy(status.board)
+
             # Events loop
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_w:
+                        status.slide_up(status.board)
 
+                    if event.key == pygame.K_s:
+                        status.slide_down(status.board)
+
+                    if event.key == pygame.K_a:
+                        status.slide_left(status.board)
+
+                    if event.key == pygame.K_d:
+                        status.slide_right(status.board)
+
+                    if status.board == temp_board:
+                        print("try diff direction")
+                    else:
+                        if status.check_winning():
+                            print("***you won!***")
+                            break
+                        else:
+                            status.get_random_num()
+
+                            if status.check_losing():
+                                print("you lost :(")
+                                break
             self.refresh(main_board, status)
             pygame.display.update()
 

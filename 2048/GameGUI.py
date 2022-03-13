@@ -20,7 +20,7 @@ class GameGUI:
         blocks = ['2', '4', '8', '16', '32', '64', '128', '256', '512', '1024', '2048']
         for block in blocks:
             self.IMAGES[block] = pygame.transform.scale(pygame.image.load("images/" + block + ".png"),
-                                                        (self.SQ_SIZE, self.SQ_SIZE)).convert()
+                                                        (self.SQ_SIZE, self.SQ_SIZE))
 
     def refresh(self, surface, stat):
         self.load_board(surface)
@@ -30,7 +30,7 @@ class GameGUI:
         for row in range(self.DIMENSION):
             for col in range(self.DIMENSION):
                 pygame.draw.rect(surface, 'grey', [col * self.SQ_SIZE, row * self.SQ_SIZE, self.SQ_SIZE, self.SQ_SIZE])
-                pygame.draw.rect(surface, 'red', [col * self.SQ_SIZE, row * self.SQ_SIZE, self.SQ_SIZE, self.SQ_SIZE], 1)
+                pygame.draw.rect(surface, 'dark grey', [col * self.SQ_SIZE, row * self.SQ_SIZE, self.SQ_SIZE, self.SQ_SIZE], 1)
 
     def update_blocks(self, surface, stat):
         for row in range(self.DIMENSION):
@@ -41,12 +41,12 @@ class GameGUI:
                                  [col * self.SQ_SIZE, row * self.SQ_SIZE, self.SQ_SIZE, self.SQ_SIZE])
 
     def main(self):
-
+        self.load_images()
         status = Game2048()
         pygame.display.set_caption("2048 Game")
+        pygame.display.set_icon(self.IMAGES['2048'])
         main_board = pygame.display.set_mode(self.SCREEN_COORDINATES)
         main_board.fill(pygame.Color("grey"))
-        self.load_images()
 
         status.get_random_num()
         status.get_random_num()

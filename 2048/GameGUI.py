@@ -9,6 +9,7 @@ class GameGUI:
         self.SCREEN_COORDINATES = (400, 400)
         self.DIMENSION = 4
         self.SQ_SIZE = self.SCREEN_COORDINATES[0] // self.DIMENSION
+        self.SQ_BORDER = 3
         self.IMAGES = {}
 
         pygame.init()
@@ -19,8 +20,8 @@ class GameGUI:
         """
         blocks = ['2', '4', '8', '16', '32', '64', '128', '256', '512', '1024', '2048']
         for block in blocks:
-            self.IMAGES[block] = pygame.transform.scale(pygame.image.load("images/" + block + ".png"),
-                                                        (self.SQ_SIZE, self.SQ_SIZE))
+            image_size = (self.SQ_SIZE-(self.SQ_BORDER*2), self.SQ_SIZE-(self.SQ_BORDER*2))
+            self.IMAGES[block] = pygame.transform.scale(pygame.image.load("images/" + block + ".png"), image_size)
 
     def refresh(self, surface, stat):
         self.load_board(surface)
@@ -29,16 +30,17 @@ class GameGUI:
     def load_board(self, surface):
         for row in range(self.DIMENSION):
             for col in range(self.DIMENSION):
-                pygame.draw.rect(surface, 'grey', [col * self.SQ_SIZE, row * self.SQ_SIZE, self.SQ_SIZE, self.SQ_SIZE])
-                pygame.draw.rect(surface, 'dark grey', [col * self.SQ_SIZE, row * self.SQ_SIZE, self.SQ_SIZE, self.SQ_SIZE], 1)
+                rect = [col * self.SQ_SIZE, row * self.SQ_SIZE, self.SQ_SIZE, self.SQ_SIZE]
+                pygame.draw.rect(surface, 'grey', rect)
+                pygame.draw.rect(surface, 'dark grey', rect, self.SQ_BORDER)
 
     def update_blocks(self, surface, stat):
         for row in range(self.DIMENSION):
             for col in range(self.DIMENSION):
                 block = stat.board[row][col]
                 if block != 0:
-                    surface.blit(self.IMAGES[str(block)],
-                                 [col * self.SQ_SIZE, row * self.SQ_SIZE, self.SQ_SIZE, self.SQ_SIZE])
+                    rect = [col * self.SQ_SIZE + self.SQ_BORDER, row * self.SQ_SIZE + self.SQ_BORDER, self.SQ_SIZE, self.SQ_SIZE]
+                    surface.blit(self.IMAGES[str(block)], rect)
 
     def main(self):
         self.load_images()

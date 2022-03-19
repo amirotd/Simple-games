@@ -12,6 +12,7 @@ class Game2048:
         self.init_val = [2, 4]
         self.DIMENSION = 4
         self.game_over = False
+        self.score = 0
 
     @staticmethod
     def clear_screen():
@@ -41,6 +42,7 @@ class Game2048:
                 else:
                     print(' ' * (count-len(str(self.board[i][j])))+str(self.board[i][j])+'|', end='')
             print()
+        print("score: " + str(self.score))
         print("=" * 20)
 
     def generate_random(self):
@@ -82,6 +84,8 @@ class Game2048:
             if row[j] == row[j + 1]:
                 row[j] *= 2
                 row[j + 1] = 0
+                if row == self.board[0] or row == self.board[1] or row == self.board[2] or row == self.board[3]:
+                    self.score += row[j]
         for k in range(self.DIMENSION - 2):
             # slides the other elements that are left
             for j in range(self.DIMENSION - 1, 0, -1):
@@ -147,6 +151,8 @@ class Game2048:
                 if bord[j][i] == bord[j + 1][i]:
                     bord[j][i] *= 2
                     bord[j + 1][i] = 0
+                    if bord == self.board:
+                        self.score += bord[j][i]
             for k in range(self.DIMENSION - 2):
                 # slides the other elements that are left
                 for j in range(self.DIMENSION - 1, 0, -1):
@@ -173,6 +179,8 @@ class Game2048:
                 if bord[j][i] == bord[j - 1][i]:
                     bord[j][i] *= 2
                     bord[j - 1][i] = 0
+                    if bord == self.board:
+                        self.score += bord[j][i]
             for k in range(self.DIMENSION - 2):
                 # slides the other elements that are left
                 for j in range(self.DIMENSION - 1):

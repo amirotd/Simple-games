@@ -29,7 +29,10 @@ class GameGUI:
         pygame.draw.rect(screen, 'dark grey', [0, 0, self.SCREEN_COORDINATES[0], self.SCREEN_COORDINATES[1]])
         screen.blit(surface, [50, 150, self.BOARD_COORDINATES[0], self.BOARD_COORDINATES[1]])
 
-        self.load_board(surface)
+        if stat.check_losing():
+            self.losing_message(screen)
+        else:
+            self.load_board(surface)
         self.update_blocks(surface, stat)
         self.update_score(screen, stat)
 
@@ -52,6 +55,16 @@ class GameGUI:
         score_surface = self.font.render("Score: " + str(stat.score), True, "0x494949")
         score_rect = score_surface.get_rect(topleft=(50, 80))
         screen.blit(score_surface, score_rect)
+
+    def losing_message(self, screen):
+        losing_surface = pygame.Surface((self.BOARD_COORDINATES[0], self.BOARD_COORDINATES[1]))
+        losing_surface.set_alpha(100)
+        losing_surface.fill("red")
+
+        losing_text = self.font.render("You Lost!", True, "white")
+        losing_text_rect = losing_text.get_rect(center=(self.BOARD_COORDINATES[0] // 2, self.BOARD_COORDINATES[1] // 2))
+        losing_surface.blit(losing_text, losing_text_rect)
+        screen.blit(losing_surface, (50, 150))
 
     def main(self):
         self.load_images()

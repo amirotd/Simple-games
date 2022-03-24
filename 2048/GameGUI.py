@@ -15,6 +15,7 @@ class GameGUI:
 
         pygame.init()
         self.font = pygame.font.SysFont('arial', 40)
+        self.font2 = pygame.font.SysFont('arial black', 60)
 
     def load_images(self):
         """
@@ -62,7 +63,7 @@ class GameGUI:
         losing_surface.set_alpha(100)
         losing_surface.fill("red")
 
-        losing_text = self.font.render("You Lost!", True, "white")
+        losing_text = self.font2.render("You Lost!", True, "white")
         losing_text_rect = losing_text.get_rect(center=(self.SCREEN_COORDINATES[0] // 2, self.SCREEN_COORDINATES[1] // 2))
         screen.blit(losing_surface, (50, 150))
         screen.blit(losing_text, losing_text_rect)
@@ -72,7 +73,7 @@ class GameGUI:
         winning_surface.set_alpha(100)
         winning_surface.fill("green")
 
-        winning_text = self.font.render("You Won!", True, "white")
+        winning_text = self.font2.render("You Won!", True, "white")
         winning_text_rect = winning_text.get_rect(center=(self.SCREEN_COORDINATES[0] // 2, self.SCREEN_COORDINATES[1] // 2))
         screen.blit(winning_surface, (50, 150))
         screen.blit(winning_text, winning_text_rect)

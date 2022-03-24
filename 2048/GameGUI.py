@@ -31,8 +31,9 @@ class GameGUI:
 
         if stat.check_losing():
             self.losing_message(screen)
-        else:
-            self.load_board(surface)
+        elif stat.check_winning():
+            self.winning_message(screen)
+        self.load_board(surface)
         self.update_blocks(surface, stat)
         self.update_score(screen, stat)
 
@@ -62,9 +63,19 @@ class GameGUI:
         losing_surface.fill("red")
 
         losing_text = self.font.render("You Lost!", True, "white")
-        losing_text_rect = losing_text.get_rect(center=(self.BOARD_COORDINATES[0] // 2, self.BOARD_COORDINATES[1] // 2))
-        losing_surface.blit(losing_text, losing_text_rect)
+        losing_text_rect = losing_text.get_rect(center=(self.SCREEN_COORDINATES[0] // 2, self.SCREEN_COORDINATES[1] // 2))
         screen.blit(losing_surface, (50, 150))
+        screen.blit(losing_text, losing_text_rect)
+
+    def winning_message(self, screen):
+        winning_surface = pygame.Surface((self.BOARD_COORDINATES[0], self.BOARD_COORDINATES[1]))
+        winning_surface.set_alpha(100)
+        winning_surface.fill("green")
+
+        winning_text = self.font.render("You Won!", True, "white")
+        winning_text_rect = winning_text.get_rect(center=(self.SCREEN_COORDINATES[0] // 2, self.SCREEN_COORDINATES[1] // 2))
+        screen.blit(winning_surface, (50, 150))
+        screen.blit(winning_text, winning_text_rect)
 
     def main(self):
         self.load_images()
@@ -90,30 +101,36 @@ class GameGUI:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_w:
-                        status.slide_up(status.board)
+                    if not status.check_winning() and not status.check_losing():
+                        if event.key == pygame.K_w:
+                            status.slide_up(status.board)
 
-                    if event.key == pygame.K_s:
-                        status.slide_down(status.board)
+                        if event.key == pygame.K_s:
+                            status.slide_down(status.board)
 
-                    if event.key == pygame.K_a:
-                        status.slide_left(status.board)
+                        if event.key == pygame.K_a:
+                            status.slide_left(status.board)
 
-                    if event.key == pygame.K_d:
-                        status.slide_right(status.board)
+                        if event.key == pygame.K_d:
+                            status.slide_right(status.board)
 
-                    if status.board == temp_board:
-                        print("try diff direction")
-                    else:
-                        if status.check_winning():
-                            print("***you won!***")
-                            break
+                        if status.board == temp_board:
+                            print("try diff direction")
                         else:
                             status.get_random_num()
 
-                            if status.check_losing():
-                                print("you lost :(")
-                                break
+                    # if status.board == temp_board:
+                    #     print("try diff direction")
+                    # else:
+                    #     if status.check_winning():
+                    #         print("***you won!***")
+                    #         break
+                    #     else:
+                    #         status.get_random_num()
+                    #
+                    #         if status.check_losing():
+                    #             print("you lost :(")
+                    #             break
             self.refresh(screen, main_board, status)
             pygame.display.update()
 

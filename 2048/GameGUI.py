@@ -12,10 +12,13 @@ class GameGUI:
         self.SQ_SIZE = self.BOARD_COORDINATES[0] // self.DIMENSION
         self.SQ_BORDER = 3
         self.IMAGES = {}
+        self.end_game_screen_value = 0
 
         pygame.init()
         self.font = pygame.font.SysFont('arial', 40)
         self.font2 = pygame.font.SysFont('arial black', 60)
+
+        self.clock = pygame.time.Clock()
 
     def load_images(self):
         """
@@ -59,23 +62,27 @@ class GameGUI:
         screen.blit(score_surface, score_rect)
 
     def losing_message(self, screen):
-        losing_surface = pygame.Surface((self.BOARD_COORDINATES[0], self.BOARD_COORDINATES[1]))
+        if self.end_game_screen_value != self.BOARD_COORDINATES[0]:
+            self.end_game_screen_value += 10
+        losing_surface = pygame.Surface((self.end_game_screen_value, self.end_game_screen_value))
         losing_surface.set_alpha(100)
         losing_surface.fill("red")
 
         losing_text = self.font2.render("You Lost!", True, "white")
         losing_text_rect = losing_text.get_rect(center=(self.SCREEN_COORDINATES[0] // 2, self.SCREEN_COORDINATES[1] // 2))
-        screen.blit(losing_surface, (50, 150))
+        screen.blit(losing_surface, (250 - self.end_game_screen_value // 2, 350 - self.end_game_screen_value // 2))
         screen.blit(losing_text, losing_text_rect)
 
     def winning_message(self, screen):
-        winning_surface = pygame.Surface((self.BOARD_COORDINATES[0], self.BOARD_COORDINATES[1]))
+        if self.end_game_screen_value != self.BOARD_COORDINATES[0]:
+            self.end_game_screen_value += 10
+        winning_surface = pygame.Surface((self.end_game_screen_value, self.end_game_screen_value))
         winning_surface.set_alpha(100)
         winning_surface.fill("green")
 
         winning_text = self.font2.render("You Won!", True, "white")
         winning_text_rect = winning_text.get_rect(center=(self.SCREEN_COORDINATES[0] // 2, self.SCREEN_COORDINATES[1] // 2))
-        screen.blit(winning_surface, (50, 150))
+        screen.blit(winning_surface, (250 - self.end_game_screen_value // 2, 350 - self.end_game_screen_value // 2))
         screen.blit(winning_text, winning_text_rect)
 
     def main(self):
@@ -134,6 +141,7 @@ class GameGUI:
                     #             break
             self.refresh(screen, main_board, status)
             pygame.display.update()
+            self.clock.tick(120)
 
 
 if __name__ == '__main__':

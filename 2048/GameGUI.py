@@ -110,6 +110,9 @@ class GameGUI:
                         if event.key == pygame.K_d:
                             status.slide_right(status.board)
 
+                        if event.key == pygame.K_r:
+                            status.reset_game()
+
                         if status.board == temp_board:
                             print("try diff direction")
                         else:

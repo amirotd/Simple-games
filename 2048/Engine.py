@@ -96,10 +96,10 @@ class Game2048:
 
     def slide_left(self, bord):
         """
-         This method applies the slide_horizontally method to all of the main-board's rows.
+         This method applies the slide_horizontally method to all the main-board's rows.
         (Slides every row to left)
 
-        :param bord: The main-board that we wants to slide it to Left
+        :param bord: The main-board that we want to slide it to Left
         :return: The slided version of main-board
         """
         for i in range(self.DIMENSION):
@@ -123,7 +123,7 @@ class Game2048:
          This method takes the main-board as input and then reverses its rows,
         slides it to left and then reverses it again.(this process slides rows to right)
 
-        :param bord: The main-board that we wants to slide it to Right
+        :param bord: The main-board that we want to slide it to Right
         :return: The slided version of main-board
         """
         for i in range(self.DIMENSION):
@@ -136,7 +136,7 @@ class Game2048:
         """
          This method slides the elements to up direction.
 
-        :param bord: The main-board that we wants to slide it to Up
+        :param bord: The main-board that we want to slide it to Up
         :return: The slided version of main-board
         """
         for i in range(self.DIMENSION):
@@ -164,7 +164,7 @@ class Game2048:
         """
          This method slides the elements to down direction.
 
-        :param bord: The main-board that we wants to slide it to Down
+        :param bord: The main-board that we want to slide it to Down
         :return: The slided version of main-board
         """
         for i in range(self.DIMENSION):
@@ -201,7 +201,7 @@ class Game2048:
 
     def check_losing(self):
         """
-         This method checks for all of the moves in every direction.
+         This method checks for all the moves in every direction.
 
          :return: if any moves left returns `False` otherwise returns `True`
         """
@@ -216,6 +216,18 @@ class Game2048:
                     self.slide_right(temp_board1)
                     return True
         return False
+
+    def reset_game(self):
+        """
+         This method resets the whole game.(board and score)
+        """
+        self.board = [[0, 0, 0, 0],
+                      [0, 0, 0, 0],
+                      [0, 0, 0, 0],
+                      [0, 0, 0, 0]]
+        self.score = 0
+        self.game_over = False
+        self.get_random_num()
 
     def main(self):
         """
@@ -236,6 +248,8 @@ class Game2048:
                 self.slide_down(self.board)
             elif direction == 'd':
                 self.slide_right(self.board)
+            elif direction == 'r':
+                self.reset_game()
             elif direction == 'exit':
                 break
             else:

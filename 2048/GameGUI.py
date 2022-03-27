@@ -12,10 +12,13 @@ class GameGUI:
         self.SQ_SIZE = self.BOARD_COORDINATES[0] // self.DIMENSION
         self.SQ_BORDER = 3
         self.IMAGES = {}
-        self.end_game_screen_value = 0
+
+        self.end_screen_value = 0
+        self.menu_screen_value = 0
+        self.menu_on = False
 
         pygame.init()
-        self.font = pygame.font.SysFont('arial', 40)
+        self.font = pygame.font.SysFont('arial', 35)
         self.font2 = pygame.font.SysFont('arial black', 60)
 
         self.clock = pygame.time.Clock()
@@ -25,6 +28,7 @@ class GameGUI:
          This method loads images into pygame.
         """
         blocks = ['2', '4', '8', '16', '32', '64', '128', '256', '512', '1024', '2048']
+        self.IMAGES['menu'] = pygame.transform.scale(pygame.image.load("images/menu.png"), [self.SQ_SIZE, self.SQ_SIZE-20])
         for block in blocks:
             image_size = (self.SQ_SIZE-(self.SQ_BORDER*2), self.SQ_SIZE-(self.SQ_BORDER*2))
             self.IMAGES[block] = pygame.transform.scale(pygame.image.load("images/" + block + ".png"), image_size)
@@ -40,6 +44,9 @@ class GameGUI:
         self.load_board(surface)
         self.update_blocks(surface, stat)
         self.update_score(screen, stat)
+        if self.menu_on:
+            self.menu(screen)
+        screen.blit(self.IMAGES['menu'], [self.SCREEN_COORDINATES[0] - self.SQ_SIZE, 0, self.SQ_SIZE, self.SQ_SIZE-20])
 
     def load_board(self, surface):
         for row in range(self.DIMENSION):
@@ -57,21 +64,51 @@ class GameGUI:
                     surface.blit(self.IMAGES[str(block)], rect)
 
     def update_score(self, screen, stat):
-        score_surface = self.font.render("Score: " + str(stat.score), True, "0x494949")
-        score_rect = score_surface.get_rect(topleft=(50, 80))
-        screen.blit(score_surface, score_rect)
+        score_text = "High Score: " + str(0) + "\n" + "Score: " + str(stat.score)  # Todo: add highScore in Engine.py
+        lines = score_text.splitlines()
+        for i, line in enumerate(lines):
+            text = self.font.render(line, True, "0x494949")
+            rect = text.get_rect(topleft=(60, 50 + i*50))
+            screen.blit(text, rect)
+        # score_surface = self.font.render("Score: " + str(stat.score), True, "0x494949")
+        # score_rect = score_surface.get_rect(topleft=(50, 80))
+        # screen.blit(score_surface, score_rect)
 
     def ending_message(self, screen, message: str, color: str):
-        if self.end_game_screen_value != self.BOARD_COORDINATES[0]:
-            self.end_game_screen_value += 10
-        ending_surface = pygame.Surface((self.end_game_screen_value, self.end_game_screen_value))
+        if self.end_screen_value != self.BOARD_COORDINATES[0]:
+            self.end_screen_value += 10
+        ending_surface = pygame.Surface((self.end_screen_value, self.end_screen_value))
         ending_surface.set_alpha(100)
         ending_surface.fill(color)
 
         ending_text = self.font2.render(message, True, "white")
-        ending_text_rect = ending_text.get_rect(center=(self.SCREEN_COORDINATES[0] // 2, self.SCREEN_COORDINATES[1] // 2))
-        screen.blit(ending_surface, (250 - self.end_game_screen_value // 2, 350 - self.end_game_screen_value // 2))
+        ending_text_rect = ending_text.get_rect(center=(self.SCREEN_COORDINATES[0]//2, self.SCREEN_COORDINATES[1]//2))
+
+        try_again_text = "Do you want to play again?\nYes[Y]   No[N]"   # Todo: make Yes and No work
+        lines = try_again_text.splitlines()
+
+        screen.blit(ending_surface, (self.SQ_SIZE * 2 + 50 - self.end_screen_value // 2, self.SQ_SIZE * 2 + 150 - self.end_screen_value // 2))
         screen.blit(ending_text, ending_text_rect)
+        for i, line in enumerate(lines):
+            text = self.font.render(line, True, "white")
+            rect = text.get_rect(center=(self.SCREEN_COORDINATES[0] // 2, self.SCREEN_COORDINATES[1] // 2 + 70 + i*50))
+            screen.blit(text, rect)
+
+    def menu(self, screen):  # Todo: make every item in menu work
+        if self.menu_screen_value != self.SCREEN_COORDINATES[0]:
+            self.menu_screen_value += 20
+        menu_surface = pygame.Surface((self.menu_screen_value, self.menu_screen_value+100))
+        menu_surface.set_alpha(150)
+        menu_surface.fill("blue")
+
+        menu_text = "Rest Game\nUndo\nAbout\nExit"
+        lines = menu_text.splitlines()
+
+        screen.blit(menu_surface, (self.SQ_SIZE * 2 + 50 - self.menu_screen_value // 2, self.SQ_SIZE * 2 + 50 - self.menu_screen_value // 2))
+        for i, line in enumerate(lines):
+            text = self.font2.render(line, True, "white")
+            rect = text.get_rect(center=(self.SCREEN_COORDINATES[0]//2, self.SCREEN_COORDINATES[1]//2 - 150 + i*100))
+            screen.blit(text, rect)
 
     def main(self):
         self.load_images()
@@ -96,8 +133,21 @@ class GameGUI:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    location = pygame.mouse.get_pos()
+                    x1 = self.SCREEN_COORDINATES[0]-self.SQ_SIZE
+                    x2 = self.SCREEN_COORDINATES[0]
+                    y2 = self.SQ_SIZE-20
+
+                    if x1 < location[0] < x2 and 0 < location[1] < y2:
+                        if self.menu_on:
+                            self.menu_on = False
+                            self.menu_screen_value = 0
+                        else:
+                            self.menu_on = True
+
                 if event.type == pygame.KEYDOWN:
-                    if not status.check_winning() and not status.check_losing():
+                    if not status.check_winning() and not status.check_losing() and not self.menu_on:
                         if event.key == pygame.K_w:
                             status.slide_up(status.board)
 
@@ -136,5 +186,5 @@ class GameGUI:
 
 
 if __name__ == '__main__':
-    x = GameGUI()
-    x.main()
+    game = GameGUI()
+    game.main()

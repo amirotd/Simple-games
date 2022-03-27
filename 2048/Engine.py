@@ -33,6 +33,7 @@ class Game2048:
         count = len(str(largest))   # every cell of the table will be equal to the size of the largest number
 
         self.clear_screen()
+        print()
         print("=" * 20)
         for i in range(self.DIMENSION):
             print('|', end='')
@@ -279,11 +280,17 @@ class Game2048:
 if __name__ == '__main__':
     game = Game2048()
     print("""
-    _______________________
-    |     (2048 game)     |
-    -----------------------
+    ####################################################
+    #      ___        __      __  __         __        #
+    #    /'___`\    /'__`\   /\ \ \ \      /' _`\      #
+    #   /\_\ /\ \  /\ \/\ \  \ \ \ \ \    /\ \L\ \     #
+    #   \/_/// /__ \ \ \ \ \  \ \ \_\ \__ \/_> _ <_    #
+    #      // /_\ \ \ \ \_\ \  \ \__  ,__\  /\ \L\ \   #
+    #     /\______/  \ \____/   \/_/\__\_/  \ \____/   #
+    #     \/_____/    \/___/       \/__/     \/___/    #
+    ####################################################
     """)
-    input("press ENTER to start...")
+    input("[+] press ENTER to start...")
     game.get_random_num()
     game.get_random_num()
     game.print_board()

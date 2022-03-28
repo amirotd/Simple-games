@@ -29,6 +29,7 @@ class GameGUI:
         """
         blocks = ['2', '4', '8', '16', '32', '64', '128', '256', '512', '1024', '2048']
         self.IMAGES['menu'] = pygame.transform.scale(pygame.image.load("images/menu.png"), [self.SQ_SIZE, self.SQ_SIZE-20])
+        self.IMAGES['undo'] = pygame.transform.scale(pygame.image.load("images/undo.png"), [self.SQ_SIZE//2, self.SQ_SIZE//2])
         for block in blocks:
             image_size = (self.SQ_SIZE-(self.SQ_BORDER*2), self.SQ_SIZE-(self.SQ_BORDER*2))
             self.IMAGES[block] = pygame.transform.scale(pygame.image.load("images/" + block + ".png"), image_size)
@@ -36,6 +37,7 @@ class GameGUI:
     def refresh(self, screen, surface, stat):
         pygame.draw.rect(screen, 'dark grey', [0, 0, self.SCREEN_COORDINATES[0], self.SCREEN_COORDINATES[1]])
         screen.blit(surface, [50, 150, self.BOARD_COORDINATES[0], self.BOARD_COORDINATES[1]])
+        screen.blit(self.IMAGES['undo'], [(7*self.SQ_SIZE//2)+50-self.SQ_BORDER, 150-self.SQ_SIZE//2])
 
         if stat.check_losing():
             self.ending_message(screen, "You Lost!", "red")
@@ -135,6 +137,14 @@ class GameGUI:
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     location = pygame.mouse.get_pos()
+                    xu1 = self.SCREEN_COORDINATES[0]-(self.SQ_SIZE//2)-50
+                    xu2 = self.SCREEN_COORDINATES[0]-50
+                    yu1 = 150-self.SQ_SIZE//2
+                    yu2 = 150
+
+                    if xu1 < location[0] < xu2 and yu1 < location[1] < yu2:
+                        status.undo()
+
                     x1 = self.SCREEN_COORDINATES[0]-self.SQ_SIZE
                     x2 = self.SCREEN_COORDINATES[0]
                     y2 = self.SQ_SIZE-20
@@ -147,17 +157,23 @@ class GameGUI:
                             self.menu_on = True
 
                 if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_u:
+                        status.undo()
                     if not status.check_winning() and not status.check_losing() and not self.menu_on:
                         if event.key == pygame.K_w:
+                            status.save_last_values()
                             status.slide_up(status.board)
 
                         if event.key == pygame.K_s:
+                            status.save_last_values()
                             status.slide_down(status.board)
 
                         if event.key == pygame.K_a:
+                            status.save_last_values()
                             status.slide_left(status.board)
 
                         if event.key == pygame.K_d:
+                            status.save_last_values()
                             status.slide_right(status.board)
 
                         if event.key == pygame.K_r:
@@ -166,7 +182,8 @@ class GameGUI:
                         if status.board == temp_board:
                             print("try diff direction")
                         else:
-                            status.get_random_num()
+                            if status.board != status.last_move:
+                                status.get_random_num()
 
                     # if status.board == temp_board:
                     #     print("try diff direction")

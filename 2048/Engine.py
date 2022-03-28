@@ -13,6 +13,8 @@ class Game2048:
         self.DIMENSION = 4
         self.game_over = False
         self.score = 0
+        self.last_move = []
+        self.last_score = 0
 
     @staticmethod
     def clear_screen():
@@ -230,6 +232,15 @@ class Game2048:
         self.game_over = False
         self.get_random_num()
 
+    def save_last_values(self):
+        self.last_move = copy.deepcopy(self.board)
+        self.last_score = copy.deepcopy(self.score)
+
+    def undo(self):
+        if len(self.last_move) > 0:
+            self.board = self.last_move
+            self.score = self.last_score
+
     def main(self):
         """
          This method is the main loop of the game.
@@ -240,17 +251,24 @@ class Game2048:
 
             # copies the board in another list to check if the direction made is available or not
             temp_board = copy.deepcopy(self.board)
+            lastscore = copy.deepcopy(self.score)
 
             if direction == 'w':
+                self.save_last_values()
                 self.slide_up(self.board)
             elif direction == 'a':
+                self.save_last_values()
                 self.slide_left(self.board)
             elif direction == 's':
+                self.save_last_values()
                 self.slide_down(self.board)
             elif direction == 'd':
+                self.save_last_values()
                 self.slide_right(self.board)
             elif direction == 'r':
                 self.reset_game()
+            elif direction == 'u':
+                self.undo()
             elif direction == 'exit':
                 break
             else:
@@ -268,7 +286,8 @@ class Game2048:
                         input("press ENTER to exit...")
                         self.game_over = True
                     else:
-                        self.get_random_num()
+                        if self.board != self.last_move:
+                            self.get_random_num()
                         self.print_board()
 
                         if self.check_losing():

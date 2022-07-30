@@ -88,8 +88,19 @@ class Tetris:
     def get_piece(self):
         return random.choice(self.pieces)
 
-    def get_down(self, piece_pos):
+    @staticmethod
+    def get_down(piece_pos):
         new_piece_pos = [piece_pos[0] + 1, piece_pos[1]]
+        return new_piece_pos
+
+    @staticmethod
+    def get_left(piece_pos):
+        new_piece_pos = [piece_pos[0], piece_pos[1] - 1]
+        return new_piece_pos
+
+    @staticmethod
+    def get_right(piece_pos):
+        new_piece_pos = [piece_pos[0], piece_pos[1] + 1]
         return new_piece_pos
 
     @staticmethod
@@ -110,11 +121,11 @@ class Tetris:
                     if c == 'w':
                         pass
                     if c == 'a':
-                        pass
+                        piece_pos = self.get_left(piece_pos)
                     if c == 'd':
-                        pass
+                        piece_pos = self.get_right(piece_pos)
                     if c == 's':
-                        pass
+                        piece_pos = self.get_down(piece_pos)
                     if c == 'g':
                         break
 

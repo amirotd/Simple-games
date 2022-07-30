@@ -64,7 +64,7 @@ class Tetris:
         self.clear_screen()
         board_copy = deepcopy(self.board)
         current_piece_size_y = len(current_piece)
-        current_piece_size_x = len(current_piece)
+        current_piece_size_x = len(current_piece[0])
         for i in range(current_piece_size_y):
             for j in range(current_piece_size_x):
                 board_copy[piece_pos[0]+i][piece_pos[1]+j] = current_piece[i][j] | self.board[piece_pos[0]+i][piece_pos[1]+j]
@@ -104,6 +104,12 @@ class Tetris:
         return new_piece_pos
 
     @staticmethod
+    def rotate_piece(piece):
+        piece_copy = deepcopy(piece)
+        reverse_piece = piece_copy[::-1]
+        return list(list(elem) for elem in zip(*reverse_piece))
+
+    @staticmethod
     def kbhit():
         return select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], [])
 
@@ -119,7 +125,7 @@ class Tetris:
                 if self.kbhit():
                     c = sys.stdin.read(1)
                     if c == 'w':
-                        pass
+                        current_piece = self.rotate_piece(current_piece)
                     if c == 'a':
                         piece_pos = self.get_left(piece_pos)
                     if c == 'd':

@@ -10,10 +10,10 @@ from copy import deepcopy
 
 class Tetris:
     def __init__(self):
-        self.O = [[1, 1],
+        self.o = [[1, 1],
                   [1, 1]]
 
-        self.I = [[1], [1], [1], [1]]
+        self.i = [[1], [1], [1], [1]]
 
         self.Z = [[1, 1, 0],
                   [0, 1, 1]]
@@ -32,7 +32,7 @@ class Tetris:
                   [0, 1],
                   [1, 1]]
 
-        self.pieces = [self.S, self.Z, self.I, self.O, self.J, self.L, self.T]
+        self.pieces = [self.S, self.Z, self.i, self.o, self.J, self.L, self.T]
         self.board = [[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
                       [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
                       [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
@@ -107,7 +107,32 @@ class Tetris:
     def rotate_piece(piece):
         piece_copy = deepcopy(piece)
         reverse_piece = piece_copy[::-1]
-        return list(list(elem) for elem in zip(*reverse_piece))
+        return list(list(i) for i in zip(*reverse_piece))
+
+    def check_collision(self, current_piece, piece_pos):
+        current_piece_size_y = len(current_piece)
+        current_piece_size_x = len(current_piece[0])
+        for i in range(current_piece_size_y):
+            for j in range(current_piece_size_x):
+                if self.board[piece_pos[0] + i][piece_pos[1] + j] in (1, 2, 3) and current_piece[i][j] == 1:
+                    return False
+        return True
+
+    def valid_left(self, current_piece, piece_pos):
+        piece_pos = self.get_left(piece_pos)
+        return self.check_collision(current_piece, piece_pos)
+
+    def valid_right(self, current_piece, piece_pos):
+        piece_pos = self.get_right(piece_pos)
+        return self.check_collision(current_piece, piece_pos)
+
+    def valid_down(self, current_piece, piece_pos):
+        piece_pos = self.get_down(piece_pos)
+        return self.check_collision(current_piece, piece_pos)
+
+    def valid_rotate(self, current_piece, piece_pos):
+        current_piece = self.rotate_piece(current_piece)
+        return self.check_collision(current_piece, piece_pos)
 
     @staticmethod
     def kbhit():
@@ -125,17 +150,23 @@ class Tetris:
                 if self.kbhit():
                     c = sys.stdin.read(1)
                     if c == 'w':
-                        current_piece = self.rotate_piece(current_piece)
+                        if self.valid_rotate(current_piece, piece_pos):
+                            current_piece = self.rotate_piece(current_piece)
                     if c == 'a':
-                        piece_pos = self.get_left(piece_pos)
+                        if self.valid_left(current_piece, piece_pos):
+                            piece_pos = self.get_left(piece_pos)
                     if c == 'd':
-                        piece_pos = self.get_right(piece_pos)
+                        if self.valid_right(current_piece, piece_pos):
+                            piece_pos = self.get_right(piece_pos)
                     if c == 's':
-                        piece_pos = self.get_down(piece_pos)
+                        if self.valid_down(current_piece, piece_pos):
+                            piece_pos = self.get_down(piece_pos)
                     if c == 'g':
                         break
 
-                piece_pos = self.get_down(piece_pos)
+                if self.valid_down(current_piece, piece_pos):
+                    piece_pos = self.get_down(piece_pos)
+
                 self.print_board(current_piece, piece_pos)
                 time.sleep(0.3)
 

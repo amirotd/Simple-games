@@ -60,9 +60,10 @@ class Tetris:
     def clear_screen():
         os.system('clear')
 
-    def print_board(self, current_piece, piece_pos):
+    def print_board(self, current_piece, piece_pos, next_piece):
         self.clear_screen()
         board_copy = deepcopy(self.board)
+        m = 0
         current_piece_size_y = len(current_piece)
         current_piece_size_x = len(current_piece[0])
         for i in range(current_piece_size_y):
@@ -82,6 +83,18 @@ class Tetris:
                     print(" =", end='')
                 else:
                     print("..", end='')
+
+            if i == 5:
+                print("   Next Piece:", end='')
+            if 6 < i < 11:  # print next piece
+                print(" " * 5, end='')
+                for n in range(len(next_piece[0])):
+                    if len(next_piece) > m:
+                        if next_piece[m][n] == 1:
+                            print("▌▌", end='')
+                        else:
+                            print("  ", end='')
+                m += 1
 
             print("")
 
@@ -178,7 +191,7 @@ class Tetris:
                     piece_pos = [0, 4]
                     change_piece = False
 
-                self.print_board(current_piece, piece_pos)
+                self.print_board(current_piece, piece_pos, next_piece)
                 time.sleep(0.3)
 
         finally:

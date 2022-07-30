@@ -139,7 +139,9 @@ class Tetris:
         return select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], [])
 
     def main(self):
+        change_piece = False
         current_piece = self.get_piece()
+        next_piece = self.get_piece()
         piece_pos = [0, 4]
         old_settings = termios.tcgetattr(sys.stdin)
         try:
@@ -166,6 +168,15 @@ class Tetris:
 
                 if self.valid_down(current_piece, piece_pos):
                     piece_pos = self.get_down(piece_pos)
+
+                if not self.valid_down(current_piece, piece_pos):
+                    change_piece = True
+
+                if change_piece:
+                    current_piece = next_piece
+                    next_piece = self.get_piece()
+                    piece_pos = [0, 4]
+                    change_piece = False
 
                 self.print_board(current_piece, piece_pos)
                 time.sleep(0.3)

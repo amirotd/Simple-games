@@ -165,6 +165,11 @@ class Tetris:
             self.board.remove([2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2])
             self.board.insert(0, [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2])
 
+    def game_over(self, current_piece, piece_pos):
+        if not self.valid_down(current_piece, piece_pos) and piece_pos[0] == 0:
+            return True
+        return False
+
     @staticmethod
     def kbhit():
         return select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], [])
@@ -179,7 +184,7 @@ class Tetris:
             tty.setcbreak(sys.stdin.fileno())
             self.clear_screen()
             input('press ENTER to start...')
-            while True:
+            while not self.game_over(current_piece, piece_pos):
                 if self.kbhit():
                     c = sys.stdin.read(1)
                     if c == 'w':

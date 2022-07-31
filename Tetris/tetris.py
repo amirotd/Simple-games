@@ -122,6 +122,13 @@ class Tetris:
         reverse_piece = piece_copy[::-1]
         return list(list(i) for i in zip(*reverse_piece))
 
+    def piece_to_board_collision(self, current_piece, piece_pos):
+        current_piece_size_y = len(current_piece)
+        current_piece_size_x = len(current_piece[0])
+        for i in range(current_piece_size_y):
+            for j in range(current_piece_size_x):
+                self.board[piece_pos[0]+i][piece_pos[1]+j] = current_piece[i][j] | self.board[piece_pos[0]+i][piece_pos[1]+j]
+
     def check_collision(self, current_piece, piece_pos):
         current_piece_size_y = len(current_piece)
         current_piece_size_x = len(current_piece[0])
@@ -183,6 +190,7 @@ class Tetris:
                     piece_pos = self.get_down(piece_pos)
 
                 if not self.valid_down(current_piece, piece_pos):
+                    self.piece_to_board_collision(current_piece, piece_pos)
                     change_piece = True
 
                 if change_piece:

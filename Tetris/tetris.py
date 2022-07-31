@@ -154,6 +154,17 @@ class Tetris:
         current_piece = self.rotate_piece(current_piece)
         return self.check_collision(current_piece, piece_pos)
 
+    def clear_rows(self):
+        filled_rows = 0
+
+        for row in self.board:
+            if row == [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2]:
+                filled_rows += 1
+
+        for i in range(filled_rows):
+            self.board.remove([2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2])
+            self.board.insert(0, [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2])
+
     @staticmethod
     def kbhit():
         return select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], [])
@@ -191,6 +202,7 @@ class Tetris:
 
                 if not self.valid_down(current_piece, piece_pos):
                     self.piece_to_board_collision(current_piece, piece_pos)
+                    self.clear_rows()
                     change_piece = True
 
                 if change_piece:

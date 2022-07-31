@@ -1,3 +1,8 @@
+#
+# This is a Terminal based Tetris game
+#
+# Coded by Amir otd :)[https://github.com/amirotd]
+
 import os
 import sys
 import select
@@ -189,8 +194,17 @@ class Tetris:
         old_settings = termios.tcgetattr(sys.stdin)
         try:
             tty.setcbreak(sys.stdin.fileno())
+
             self.clear_screen()
-            input('press ENTER to start...')
+            input("""\033[1;34m
+                                  _____  ___  _____  ___  ___  ___ 
+                                 |_   _|| __||_   _|| _ \|_ _|/ __|
+                                   | |  | _|   | |  |   / | | \__ \\
+                                   |_|  |___|  |_|  |_|_\|___||___/  
+                                                                   by @amirotd
+
+                                [*] Press ENTER to start...
+                        """)
             while not self.game_over(current_piece, piece_pos):
                 if self.kbhit():
                     c = sys.stdin.read(1)
@@ -206,7 +220,7 @@ class Tetris:
                     if c == 's':
                         if self.valid_down(current_piece, piece_pos):
                             piece_pos = self.get_down(piece_pos)
-                    if c == 'g':
+                    if c == 'q':
                         break
 
                 if self.valid_down(current_piece, piece_pos):
@@ -228,7 +242,19 @@ class Tetris:
 
         finally:
             self.clear_screen()
-            print("game over")
+            print("""\033[0;31m 
+                                              ▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+                                              ▌     ___    _    _    _  ___     ▌
+                                              ▌    / __|  /_\  | \  / || __|    ▌
+                                              ▌   | (_ | / _ \ | |\/| || _|     ▌
+                                              ▌    \___|/_/ \_\|_|  |_||___|    ▌
+                                              ▌     ___ _    _  ___  ___  _     ▌
+                                              ▌    / _ \\\ \ / /| __|| _ \| |    ▌
+                                              ▌   | (_) |\ V / | _| |   /|_|    ▌
+                                              ▌    \___/  \_/  |___||_|_\(_)    ▌
+                                              ▌                                 ▌
+                                              ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+                                                """)
             termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
 
 

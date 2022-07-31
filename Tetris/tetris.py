@@ -60,7 +60,7 @@ class Tetris:
     def clear_screen():
         os.system('clear')
 
-    def print_board(self, current_piece, piece_pos, next_piece):
+    def print_board(self, current_piece, piece_pos, next_piece, score):
         self.clear_screen()
         board_copy = deepcopy(self.board)
         m = 0
@@ -95,6 +95,8 @@ class Tetris:
                         else:
                             print("  ", end='')
                 m += 1
+            if i == 15:
+                print("   Score: {0}".format(score), end='')
 
             print("")
 
@@ -161,9 +163,13 @@ class Tetris:
             if row == [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2]:
                 filled_rows += 1
 
+        score = filled_rows * 10
+
         for i in range(filled_rows):
             self.board.remove([2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2])
             self.board.insert(0, [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2])
+
+        return score
 
     def game_over(self, current_piece, piece_pos):
         if not self.valid_down(current_piece, piece_pos) and piece_pos[0] == 0:
@@ -179,6 +185,7 @@ class Tetris:
         current_piece = self.get_piece()
         next_piece = self.get_piece()
         piece_pos = [0, 4]
+        score = 0
         old_settings = termios.tcgetattr(sys.stdin)
         try:
             tty.setcbreak(sys.stdin.fileno())
@@ -207,7 +214,7 @@ class Tetris:
 
                 if not self.valid_down(current_piece, piece_pos):
                     self.piece_to_board_collision(current_piece, piece_pos)
-                    self.clear_rows()
+                    score += self.clear_rows()
                     change_piece = True
 
                 if change_piece:
@@ -216,7 +223,7 @@ class Tetris:
                     piece_pos = [0, 4]
                     change_piece = False
 
-                self.print_board(current_piece, piece_pos, next_piece)
+                self.print_board(current_piece, piece_pos, next_piece, score)
                 time.sleep(0.3)
 
         finally:
